@@ -12,7 +12,7 @@ import 'package:flutter_application_1/data/model/voto/voto.dart';
 import 'package:http/http.dart' as http;
 
 class Repository {
-  final String url = "http://192.168.1.149:8080/api";
+  final String url = "http://192.168.1.153:8080/api";
 
   Future getlogin(String email, String password) async{
     final response = await http.post(
