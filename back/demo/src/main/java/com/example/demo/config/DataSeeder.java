@@ -2,9 +2,11 @@ package com.example.demo.config;
 
 import com.example.demo.models.*;
 import com.example.demo.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -12,6 +14,9 @@ import java.util.List;
 
 @Configuration
 public class DataSeeder {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     CommandLineRunner initData(
@@ -55,7 +60,7 @@ public class DataSeeder {
             Usuario admin = new Usuario();
             admin.setNombre("Admin");
             admin.setEmail("admin@test.com");
-            admin.setPassword("1234");
+            admin.setPassword(passwordEncoder.encode("1234"));
             admin.setRol("ADMIN");
             admin.setComunidad(comunidad);
             admin.setVivienda(v1);
@@ -63,7 +68,7 @@ public class DataSeeder {
             Usuario user1 = new Usuario();
             user1.setNombre("Juan Pérez");
             user1.setEmail("juan@test.com");
-            user1.setPassword("1234");
+            user1.setPassword(passwordEncoder.encode("1234"));
             user1.setRol("USER");
             user1.setComunidad(comunidad);
             user1.setVivienda(v1);
@@ -71,7 +76,7 @@ public class DataSeeder {
             Usuario user2 = new Usuario();
             user2.setNombre("María López");
             user2.setEmail("maria@test.com");
-            user2.setPassword("1234");
+            user2.setPassword(passwordEncoder.encode("1234"));
             user2.setRol("USER");
             user2.setComunidad(comunidad);
             user2.setVivienda(v2);
@@ -79,7 +84,7 @@ public class DataSeeder {
             Usuario user3 = new Usuario();
             user3.setNombre("Jaime Rodrigez");
             user3.setEmail("jaime@test.com");
-            user3.setPassword("1234");
+            user3.setPassword(passwordEncoder.encode("1234"));
             user3.setRol("USER");
             user3.setComunidad(comunidad);
 

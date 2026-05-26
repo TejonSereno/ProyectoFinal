@@ -8,12 +8,17 @@ import com.example.demo.models.Usuario;
 import com.example.demo.repositories.ComunidadRepository;
 import com.example.demo.repositories.UsuarioRepository;
 import com.example.demo.repositories.ViviendaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UsuarioService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final UsuarioRepository usuarioRepository;
     private final ComunidadRepository comunidadRepo;
@@ -54,7 +59,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setNombre(dto.getNombre());
         usuario.setEmail(dto.getEmail());
-        usuario.setPassword(dto.getPassword());
+        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         usuario.setRol(dto.getRol());
         usuario.setComunidad(
                 comunidadRepo.findById(dto.getComunidadId())
@@ -68,7 +73,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         usuario.setNombre(dto.getNombre());
         usuario.setEmail(dto.getEmail());
-        usuario.setPassword(dto.getPassword());
+        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         return new UsuarioDTO(usuarioRepository.save(usuario));
     }
 
@@ -82,7 +87,7 @@ public class UsuarioService {
     public UsuarioDetalleDTO login(LoginRequest loginRequest){
         Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-        if (!usuario.getPassword().equals(loginRequest.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword())) {
             throw new ResourceNotFoundException("Contraseña incorrecta");
         }
         return new UsuarioDetalleDTO(usuario);
@@ -96,7 +101,7 @@ public class UsuarioService {
         Usuario user = new Usuario();
         user.setNombre(registreRequest.getNombre());
         user.setEmail(registreRequest.getEmail());
-        user.setPassword(registreRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(registreRequest.getPassword()));
         user.setRol("USER");
         user.setVivienda(
                 viviendaRepo.findById(1L)
