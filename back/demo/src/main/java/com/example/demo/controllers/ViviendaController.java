@@ -5,12 +5,13 @@ import com.example.demo.dto.vivienda.ViviendaDTO;
 import com.example.demo.dto.vivienda.ViviendaDetalleDTO;
 import com.example.demo.dto.vivienda.ViviendaListadoDTO;
 import com.example.demo.services.ViviendaService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/viviendas")
+@RequestMapping("/viviendas")
 public class ViviendaController {
 
     private final ViviendaService viviendaService;
@@ -34,16 +35,19 @@ public class ViviendaController {
         return viviendaService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ViviendaDTO createVivienda(@RequestBody ViviendaCreateDTO vivienda) {
         return viviendaService.save(vivienda);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ViviendaDTO updateVivienda(@PathVariable Long id, @RequestBody ViviendaCreateDTO vivienda) {
         return viviendaService.update(id, vivienda);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteVivienda(@PathVariable Long id) {
         viviendaService.delete(id);

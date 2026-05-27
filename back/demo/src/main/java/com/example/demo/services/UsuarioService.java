@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegistreRequest;
 import com.example.demo.dto.usuario.*;
@@ -8,7 +9,10 @@ import com.example.demo.models.Usuario;
 import com.example.demo.repositories.ComunidadRepository;
 import com.example.demo.repositories.UsuarioRepository;
 import com.example.demo.repositories.ViviendaRepository;
+import com.example.demo.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +21,21 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     private final UsuarioRepository usuarioRepository;
     private final ComunidadRepository comunidadRepo;
     private final ViviendaRepository viviendaRepo;
-    public UsuarioService(UsuarioRepository usuarioRepository, ComunidadRepository comunidadRepository, ViviendaRepository viviendaRepository) {
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    public UsuarioService(UsuarioRepository usuarioRepository, ComunidadRepository comunidadRepository,
+                          ViviendaRepository viviendaRepository, PasswordEncoder passwordEncoder,
+                          JwtService jwtService, AuthenticationManager authenticationManager) {
         this.usuarioRepository = usuarioRepository;
         this.comunidadRepo = comunidadRepository;
         this.viviendaRepo = viviendaRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     public List<UsuarioDTO> findAll(){
@@ -84,13 +93,31 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public UsuarioDetalleDTO login(LoginRequest loginRequest){
-        Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-        if (!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword())) {
-            throw new ResourceNotFoundException("Contraseña incorrecta");
-        }
-        return new UsuarioDetalleDTO(usuario);
+    public AuthResponse login(LoginRequest loginRequest) {
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(loginRequest.getEmail())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Usuario no encontrado"
+                        ));
+
+        String token =
+                jwtService.generateToken(
+                        usuario.getEmail()
+                );
+
+        return new AuthResponse(
+                token,
+                new UsuarioDetalleDTO(usuario)
+        );
     }
 
     public UsuarioDetalleDTO registre(RegistreRequest registreRequest){
@@ -104,7 +131,7 @@ public class UsuarioService {
         user.setPassword(passwordEncoder.encode(registreRequest.getPassword()));
         user.setRol("USER");
         user.setVivienda(
-                viviendaRepo.findById(1L)
+                viviendaRepo.findById(registreRequest.getViviendaId())
                         .orElseThrow(() -> new ResourceNotFoundException("Vivienda no encontrada"))
         );
         user.setComunidad(

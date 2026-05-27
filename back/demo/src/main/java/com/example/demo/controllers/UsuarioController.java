@@ -4,12 +4,13 @@ import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegistreRequest;
 import com.example.demo.dto.usuario.*;
 import com.example.demo.services.UsuarioService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -33,21 +34,13 @@ public class UsuarioController {
         return usuarioService.findById(id);
     }
 
-    @PostMapping("/login")
-    public UsuarioDetalleDTO logUsuario(@RequestBody LoginRequest loginRequest){
-        return usuarioService.login(loginRequest);
-    }
-
-    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
     public UsuarioDTO createUsuario(@RequestBody UsuarioCreateDTO usuario) {
         return usuarioService.save(usuario);
     }
 
-    @PostMapping("/registre")
-    public UsuarioDetalleDTO registreUsuario(@RequestBody RegistreRequest registreRequest){
-        return usuarioService.registre(registreRequest);
-    }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/rol")
     public void updateRolUsuario(@PathVariable Long id) {
         usuarioService.updateRol(id);
@@ -58,7 +51,8 @@ public class UsuarioController {
         return usuarioService.update(id, usuario);
     }
 
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("{id}")
     public void deleteUsuario(@PathVariable Long id) {
         usuarioService.delete(id);
     }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/votos")
+@RequestMapping("/votos")
 public class VotoController {
 
     private final VotoService votoService;
@@ -27,6 +27,7 @@ public class VotoController {
     public VotoDetalleDTO getVoto(@PathVariable Long id){
         return votoService.findById(id);
     }
+
     @GetMapping("/{usuarioId}/{votacionId}")
     public VotoDTO getUserVoto(@PathVariable Long usuarioId, @PathVariable Long votacionId) {
         return votoService.findByUser(usuarioId, votacionId);

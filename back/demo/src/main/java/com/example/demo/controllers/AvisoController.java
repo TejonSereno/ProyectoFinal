@@ -5,12 +5,13 @@ import com.example.demo.dto.aviso.AvisoCreateDTO;
 import com.example.demo.dto.aviso.AvisoDetalleDTO;
 import com.example.demo.dto.aviso.AvisoDTO;
 import com.example.demo.services.AvisoService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/avisos")
+@RequestMapping("/avisos")
 public class AvisoController {
 
     private final AvisoService avisoService;
@@ -20,31 +21,35 @@ public class AvisoController {
     }
 
     @GetMapping
-    public List<AvisoDTO> getVotacions() {
+    public List<AvisoDTO> getAvisos() {
         return avisoService.findAll();
     }
 
     @GetMapping("/activos")
-    public List<AvisoDTO> getVotacionsActivos() {
+    public List<AvisoDTO> getAvisosActivos() {
         return avisoService.findAllActivos();
     }
+
     @GetMapping("/{id}")
-    public AvisoDetalleDTO getVotacion(@PathVariable Long id) {
+    public AvisoDetalleDTO getAviso(@PathVariable Long id) {
         return avisoService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public AvisoDTO createVotacion(@RequestBody AvisoCreateDTO aviso) {
+    public AvisoDTO createAviso(@RequestBody AvisoCreateDTO aviso) {
         return avisoService.save(aviso);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public AvisoDTO updateVotacion(@PathVariable Long id, @RequestBody AvisoCreateDTO aviso) {
+    public AvisoDTO updateAviso(@PathVariable Long id, @RequestBody AvisoCreateDTO aviso) {
         return avisoService.update(id, aviso);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public void deleteVotacion(@PathVariable Long id) {
+    public void deleteAviso(@PathVariable Long id) {
         avisoService.delete(id);
     }
 }
