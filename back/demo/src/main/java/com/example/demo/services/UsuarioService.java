@@ -82,7 +82,10 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         usuario.setNombre(dto.getNombre());
         usuario.setEmail(dto.getEmail());
-        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if(dto.getPassword() != null && !dto.getPassword().isBlank()){
+            usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
         return new UsuarioDTO(usuarioRepository.save(usuario));
     }
 
