@@ -22,8 +22,13 @@ class _ViviendaDetalleState extends State<ViviendaDetalleScreen>{
     super.initState();
 
     Future.microtask(() async {
+      final token = context.read<UserProvider>().token;
+
+      while (token == null) {
+        await Future.delayed(Duration(milliseconds: 50));
+      }
       final provider = context.read<ViviendaProvider>();
-      await provider.getViviendaDetalle(widget.viviendaId);
+      await provider.getViviendaDetalle(widget.viviendaId, token);
     });
   }
 

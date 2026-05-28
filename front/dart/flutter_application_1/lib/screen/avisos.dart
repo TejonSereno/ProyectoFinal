@@ -27,19 +27,34 @@ class _AvisosScreenState extends State<AvisosScreen> {
   @override
   void initState() {
       super.initState();
-      Future.microtask(() =>
-        context.read<AvisoProvider>().getAvisos()
-      );
+      Future.microtask(() async{
+        final userProvider = context.read<UserProvider>();
+
+        while (userProvider.token == null) {
+          await Future.delayed(Duration(milliseconds: 50));
+        }
+
+        context.read<AvisoProvider>().getAvisos(userProvider.token!);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AvisoProvider>();
     final user = context.watch<UserProvider>().user;
+    final token = context.watch<UserProvider>().token;
 
-    if (user == null) {
+    if (provider.isLoading || user == null || token == null) {
         return Scaffold(
-            body: const Center(child: CircularProgressIndicator())
+            backgroundColor: AppColors.background,
+            appBar: AppBar(
+                backgroundColor: AppColors.background,
+            ),
+            body: Center(
+                child: CircularProgressIndicator(
+                    color: AppColors.secondary
+                )
+            ),
         );
     }
 
@@ -180,7 +195,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
                                 return;
                               }
                               
-                              final ok = await provider.createAviso(tituloController.text, descripcionController.text, selectedDate!);
+                              final ok = await provider.createAviso(tituloController.text, descripcionController.text, selectedDate!, token);
                               if (ok) {
                                 setState(() {
                                   tituloController.clear();
@@ -245,7 +260,7 @@ class _AvisosScreenState extends State<AvisosScreen> {
                         Icons.delete,
                         color: AppColors.secondary),
                       onPressed: () async {
-                        final ok = await provider.deleteAviso(aviso.id);
+                        final ok = await provider.deleteAviso(aviso.id, token);
                         if (ok) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

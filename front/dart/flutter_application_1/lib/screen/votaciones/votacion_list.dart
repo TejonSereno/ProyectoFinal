@@ -16,19 +16,29 @@ class _VotacionListState extends State<VotacionList> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-      context.read<VotacionProvider>().getVotaciones()
-    );
+    Future.microtask(() async{
+      final userProvider = context.read<UserProvider>();
+
+      while (userProvider.token == null) {
+        await Future.delayed(Duration(milliseconds: 50));
+      }
+      context.read<VotacionProvider>().getVotaciones(userProvider.token!);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<VotacionProvider>();
     final user = context.watch<UserProvider>().user;
+    final token = context.watch<UserProvider>().token;
 
-    if (user == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator())
+    if (provider.isLoading || user == null || token == null) {
+      return SliverToBoxAdapter(
+        child: Center(
+            child: CircularProgressIndicator(
+              color: AppColors.secondary
+            )
+        ),
       );
     }
 
@@ -87,7 +97,7 @@ class _VotacionListState extends State<VotacionList> {
               trailing: user.rol != "ADMIN" ?null :IconButton(
                 icon: Icon(Icons.delete, color: AppColors.secondary),
                 onPressed: () async{
-                  final ok = await provider.deleteVotacion(votacion.id);
+                  final ok = await provider.deleteVotacion(votacion.id, token);
                   if (ok) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/model/usuario/usuario_list.dart';
 import 'package:flutter_application_1/data/model/usuario/usuario.dart';
-import 'package:flutter_application_1/data/repositories/repository.dart';
+import 'package:flutter_application_1/data/repositories/usuarioRepository.dart';
 
 class UsuarioProvider extends ChangeNotifier{
-  final Repository repository;
+  final UsuarioRepository repository;
 
   UsuarioProvider(this.repository);
 
@@ -16,28 +15,27 @@ class UsuarioProvider extends ChangeNotifier{
   bool get isLoading => _isLoading;
   String get error => _error;
 
-  Future<void> getUsuarios() async{
-    _isLoading = true;
-    notifyListeners();
+  Future<void> getUsuarios(String token) async{
+    try{
+      _isLoading = true;
+      notifyListeners();
 
-    final response = await repository.getUsuarios();
+      final response = await repository.getUsuarios(token);
 
-    if (response is UsuarioList) {
       _usuarios = response.usuarios;
-      _error = "";
-    } else {
-      _error = response.toString();
+    }catch(e){
+      _error = e.toString();
+    }finally{
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
-  Future<bool> chageRole(int id) async {
-    final response = await repository.changeRole(id);
+  Future<bool> chageRole(int id, String token) async {
+    final response = await repository.changeRole(id, token);
 
     if (response == 200) {
-      getUsuarios();
+      getUsuarios(token);
       notifyListeners();
       return true;
     }
@@ -45,8 +43,8 @@ class UsuarioProvider extends ChangeNotifier{
     return false;
   }
 
-  Future<bool> deleteUsuario(int id) async {
-    final response = await repository.deleteUsuario(id);
+  Future<bool> deleteUsuario(int id,String token) async {
+    final response = await repository.deleteUsuario(id, token);
 
     if (response == 200) {
       _usuarios.removeWhere((u) => u.id == id);
@@ -57,10 +55,12 @@ class UsuarioProvider extends ChangeNotifier{
     return false;
   }
 
-  Future<bool> updateUsuario(int id, String nombre, String email, String password) async {
-    final response = await repository.updateUsuario(id, nombre, email, password);    
+  Future<bool> updateUsuario(int id, String nombre, String email, String password, String token) async {
+    final response = await repository.updateUsuario(id, nombre, email, password, token);    
 
-    if (response == 200) {
+    print(response);
+    
+    if (response >= 200 && response < 300 ) {
       
       return true;
     }

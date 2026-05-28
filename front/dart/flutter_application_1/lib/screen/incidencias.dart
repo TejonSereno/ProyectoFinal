@@ -21,9 +21,14 @@ class _IncidenciaState extends State<IncidenciaScreen>{
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-      context.read<IncidenciaProvider>().getActiveIncidencias()
-    );
+    Future.microtask(() async{
+      final userProvider = context.read<UserProvider>();
+
+      while (userProvider.token == null) {
+        await Future.delayed(Duration(milliseconds: 50));
+      }
+      context.read<IncidenciaProvider>().getActiveIncidencias(userProvider.token!);
+    });
   }
 
   @override
@@ -37,14 +42,9 @@ class _IncidenciaState extends State<IncidenciaScreen>{
   Widget build(BuildContext context) {
     final provider = context.watch<IncidenciaProvider>();
     final user = context.watch<UserProvider>().user;
+    final token = context.watch<UserProvider>().token;
 
-    if (user == null) {
-      return Scaffold(
-        body: const Center(child: CircularProgressIndicator())
-      );
-    }
-
-    if (provider.isLoading) {
+    if (provider.isLoading || user == null || token == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -59,7 +59,6 @@ class _IncidenciaState extends State<IncidenciaScreen>{
       );
     }
 
-    //
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -167,7 +166,7 @@ class _IncidenciaState extends State<IncidenciaScreen>{
                             );
                             return;
                           }
-                          final ok = await provider.createIncidencia(tituloController.text, descripcionController.text, user.id);
+                          final ok = await provider.createIncidencia(tituloController.text, descripcionController.text, user.id, token);
                           if (ok) {
                             tituloController.clear();
                             descripcionController.clear();
@@ -231,14 +230,14 @@ class _IncidenciaState extends State<IncidenciaScreen>{
                                   icon: Icon(getIcon(i.estado)),
                                   color: AppColors.secondary,
                                   onPressed: () async{
-                                    await provider.changeState(i.id);
+                                    await provider.changeState(i.id, token);
                                   }
                                 ),
                                 IconButton(
                                   icon: Icon(Icons.delete),
                                   color: AppColors.secondary,
                                   onPressed: () async{
-                                    await provider.deleteIncidencia(i.id);
+                                    await provider.deleteIncidencia(i.id, token);
                                   }
                                 ),
                               ],

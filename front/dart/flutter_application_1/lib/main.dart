@@ -4,7 +4,12 @@ import 'package:flutter_application_1/data/providers/incidencia_provider.dart';
 import 'package:flutter_application_1/data/providers/usuario_provider.dart';
 import 'package:flutter_application_1/data/providers/vivienda_provider.dart';
 import 'package:flutter_application_1/data/providers/votacion_provider.dart';
-import 'package:flutter_application_1/data/repositories/repository.dart';
+import 'package:flutter_application_1/data/repositories/authRepository.dart';
+import 'package:flutter_application_1/data/repositories/avisoRepository.dart';
+import 'package:flutter_application_1/data/repositories/incidenciaRepository.dart';
+import 'package:flutter_application_1/data/repositories/usuarioRepository.dart';
+import 'package:flutter_application_1/data/repositories/viviendaRepository.dart';
+import 'package:flutter_application_1/data/repositories/votacionRepository.dart';
 import 'package:flutter_application_1/data/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -15,46 +20,39 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => UserProvider(),
+          create: (_) => UserProvider(
+            Authrepository(),
+          ),
         ),
 
-        Provider(
-          create: (_) => Repository(),
-        ),
-        
-        ChangeNotifierProxyProvider<Repository, ViviendaProvider>(
-          create: (context) => ViviendaProvider(
-            context.read<Repository>(),
+        ChangeNotifierProvider(
+          create: (_) => ViviendaProvider(
+            ViviendaRepository(),
           ),
-          update: (_, repo, previous) => ViviendaProvider(repo),
-        ),
-        
-        ChangeNotifierProxyProvider<Repository, UsuarioProvider>(
-          create: (context) => UsuarioProvider(
-            context.read<Repository>(),
-          ),
-          update: (_, repo, previous) => UsuarioProvider(repo),
         ),
 
-        ChangeNotifierProxyProvider<Repository, IncidenciaProvider>(
-          create: (context) => IncidenciaProvider(
-            context.read<Repository>(),
+        ChangeNotifierProvider(
+          create: (_) => UsuarioProvider(
+            UsuarioRepository(),
           ),
-          update: (_, repo, previous) => IncidenciaProvider(repo),
         ),
 
-        ChangeNotifierProxyProvider<Repository, VotacionProvider>(
-          create: (context) => VotacionProvider(
-            context.read<Repository>(),
+        ChangeNotifierProvider(
+          create: (_) => IncidenciaProvider(
+            IncidenciaRepository(),
           ),
-          update: (_, repo, previous) => VotacionProvider(repo),
         ),
 
-        ChangeNotifierProxyProvider<Repository, AvisoProvider>(
-          create: (context) => AvisoProvider(
-            context.read<Repository>(),
-          ), 
-          update: (_, repo, previous) => AvisoProvider(repo),
+        ChangeNotifierProvider(
+          create: (_) => VotacionProvider(
+            VotacionRepository(),
+          ),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => AvisoProvider(
+            AvisoRepository(),
+          ),
         ),
       ],
       child: MainApp(),

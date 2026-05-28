@@ -22,9 +22,14 @@ class _ViviendaState extends State<ViviendaScreen>{
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-      context.read<ViviendaProvider>().getViviendas()
-    );
+    Future.microtask(() async{
+      final token = context.read<UserProvider>().token;
+
+      while (token == null) {
+        await Future.delayed(Duration(milliseconds: 50));
+      }
+      context.read<ViviendaProvider>().getViviendas(token);
+    });
   }
 
   @override
@@ -38,6 +43,7 @@ class _ViviendaState extends State<ViviendaScreen>{
   Widget build(BuildContext context) {
     final provider = context.watch<ViviendaProvider>();
     final user = context.watch<UserProvider>().user;
+    final token = context.watch<UserProvider>().token;
 
     if (user == null) {
       return Scaffold(
@@ -165,7 +171,7 @@ class _ViviendaState extends State<ViviendaScreen>{
                                 );
                                 return;
                               }
-                              final ok = await provider.createVivienda(calleController.text, numeroController.text);
+                              final ok = await provider.createVivienda(calleController.text, numeroController.text, token!);
                               if (ok) {
                                 calleController.clear();
                                 numeroController.clear();
@@ -210,7 +216,7 @@ class _ViviendaState extends State<ViviendaScreen>{
                         icon: Icon(Icons.delete),
                         color: AppColors.secondary,
                         onPressed: () async{
-                          await provider.deleteVivienda(v.id);
+                          await provider.deleteVivienda(v.id, token!);
                         }
                       ): null,
                 );

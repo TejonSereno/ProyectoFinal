@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/model/vivienda/vivienda.dart';
 import 'package:flutter_application_1/data/model/vivienda/viviendaDetalle.dart';
-import 'package:flutter_application_1/data/model/vivienda/vivienda_list.dart';
-import 'package:flutter_application_1/data/repositories/repository.dart';
+import 'package:flutter_application_1/data/repositories/viviendaRepository.dart';
 
 class ViviendaProvider extends ChangeNotifier{
-  final Repository repository;
+  final ViviendaRepository repository;
 
   ViviendaProvider(this.repository);
 
@@ -21,33 +20,33 @@ class ViviendaProvider extends ChangeNotifier{
   bool get isCreating => _isCreating;
   String get error => _error;
 
-  Future<void> getViviendas() async{
-    _isLoading = true;
-    notifyListeners();
+  Future<void> getViviendas(String token) async{
+    try{
+      _isLoading = true;
+      notifyListeners();
 
-    final response = await repository.getViviendas();
+      final response = await repository.getViviendas(token);
 
-    if (response is ViviendaList) {
       _viviendas = response.viviendas;
-      _error = "";
-    } else {
-      _error = response.toString();
-    }
-
-    _isLoading = false;
+    }catch(e){
+      _error = e.toString();
+    }finally{
+      _isLoading = false;
     notifyListeners();
+    }
+    
   }
 
-  Future<bool> createVivienda(String calle, String numero) async {
+  Future<bool> createVivienda(String calle, String numero, String token) async {
     _isCreating = true;
     notifyListeners();
 
-    final response = await repository.putNewVivienda(calle, numero);
+    final response = await repository.putNewVivienda(calle, numero, token);
 
     _isCreating = false;
 
     if (response == 200) {
-      getViviendas();
+      getViviendas(token);
       notifyListeners();
       return true;  
     }
@@ -56,8 +55,8 @@ class ViviendaProvider extends ChangeNotifier{
     return false;
   }
 
-  Future<bool> deleteVivienda(int id) async {
-    final response = await repository.deleteVivienda(id);
+  Future<bool> deleteVivienda(int id, String token) async {
+    final response = await repository.deleteVivienda(id, token);
 
     if (response == 200) {
       _viviendas.removeWhere((v) => v.id == id);
@@ -68,21 +67,21 @@ class ViviendaProvider extends ChangeNotifier{
     return false;
   }
 
-  Future<void> getViviendaDetalle(int id) async{
-    _isLoading = true;
-    notifyListeners();
+  Future<void> getViviendaDetalle(int id, String token) async{
+    try{
+      _isLoading = true;
+      notifyListeners();
+      
 
+      final response = await repository.getViviendaDetalle(id, token);
 
-    final response = await repository.getViviendaDetalle(id);
-
-    if (response is ViviendaDetalle) {
       _viviendaDetalle = response;
-
-    } else {
-      _error = response.toString();
+    
+    }catch(e){
+      _error = e.toString();
+    } finally{
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 }

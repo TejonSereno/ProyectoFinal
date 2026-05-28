@@ -18,23 +18,23 @@ class _UsuarioState extends State<UsuarioScreen>{
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-      context.read<UsuarioProvider>().getUsuarios()
-    );
+    Future.microtask(() async{
+      final userProvider = context.read<UserProvider>();
+
+      while (userProvider.token == null) {
+        await Future.delayed(Duration(milliseconds: 50));
+      }
+      context.read<UsuarioProvider>().getUsuarios(userProvider.token!);
+    });
   }
   
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<UsuarioProvider>();
     final user = context.watch<UserProvider>().user;
+    final token = context.watch<UserProvider>().token;
 
-    if (user == null) {
-      return Scaffold(
-        body: const Center(child: CircularProgressIndicator())
-      );
-    }
-
-    if (provider.isLoading) {
+    if (provider.isLoading || user == null || token == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -95,14 +95,14 @@ class _UsuarioState extends State<UsuarioScreen>{
                     icon: Icon(Icons.app_registration_outlined),
                     color: AppColors.secondary,
                     onPressed: () async{
-                      await provider.chageRole(u.id);
+                      await provider.chageRole(u.id, token);
                     }
                   ),
                   IconButton(
                     icon: Icon(Icons.delete),
                     color: AppColors.secondary,
                     onPressed: () async{
-                      await provider.deleteUsuario(u.id);
+                      await provider.deleteUsuario(u.id, token);
                     }
                   ),
                 ],

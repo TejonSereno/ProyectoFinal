@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/paleta/colors.dart';
 import 'package:flutter_application_1/screen/login.dart';
 
-import 'package:flutter_application_1/data/model/user.dart';
-import 'package:flutter_application_1/data/repositories/repository.dart';
+import 'package:flutter_application_1/data/model/loguin/user.dart';
+import 'package:flutter_application_1/data/repositories/authRepository.dart';
 
 class ReguistreScreen extends StatefulWidget{
   const ReguistreScreen({super.key});
@@ -14,11 +14,11 @@ class ReguistreScreen extends StatefulWidget{
 
 class _ReguistreState extends State<ReguistreScreen>{
 
-  Repository repository = Repository();
+  Authrepository repository = Authrepository();
   String password = "";
   String message = "";
   int viviendaId = 0;
-  User usuario = User(id: 0, email: "", nombre: "", password: "", rol: "");
+  User usuario = User(id: 0, email: "", nombre: "", rol: "");
 
   @override
   Widget build(BuildContext context) {

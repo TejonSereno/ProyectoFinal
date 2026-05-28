@@ -3,8 +3,7 @@ import 'package:flutter_application_1/paleta/Colors.dart';
 import 'package:flutter_application_1/screen/registre.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_application_1/data/model/user.dart';
-import 'package:flutter_application_1/data/repositories/repository.dart';
+import 'package:flutter_application_1/data/model/loguin/user.dart';
 import 'package:flutter_application_1/data/providers/user_provider.dart';
 import 'package:flutter_application_1/screen/home.dart';
 
@@ -17,12 +16,10 @@ class LoguinScreen extends StatefulWidget{
 
 class _LoguinState extends State<LoguinScreen>{
 
-  Repository repository = Repository();
-
   String email = "";
   String password = "";
   String message = "";
-  User usuario = User(id: 0, email: "", nombre: "", password: "", rol: "");
+  User usuario = User(id: 0, email: "", nombre: "", rol: "");
 
   @override
   Widget build(BuildContext context) {
@@ -119,24 +116,29 @@ class _LoguinState extends State<LoguinScreen>{
     );
   }
 
-  void logIn(String email, String password) async{
-    final response = await repository.getlogin(email, password);
+  void logIn(String email, String password) async {
+  try {
+    await Provider.of<UserProvider>(
+      context,
+      listen: false,
+    ).login(email, password);
 
-    if (!mounted) return; // 🔥 clave
+    if (!mounted) return;
 
-    if(response is User){
-      Provider.of<UserProvider>(context, listen: false).setUser(response);
-      
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen())
-      );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(),
+      ),
+    );
 
-    }else if(response is String){
-      setState(() {
-        message = response.toString();
-      }); 
-    }
+  } catch (e) {
+    if (!mounted) return;
+
+    setState(() {
+      message = e.toString();
+    });
   }
+}
 
   Column errorMessage(String message) => Column(
     children: [

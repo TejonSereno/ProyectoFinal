@@ -33,11 +33,12 @@ class _VotacionDetalleState extends State<VotacionDetalleScreen> {
 
       final provider = context.read<VotacionProvider>();
 
-      await provider.getVotacionDetalle(widget.votacionId);
+      await provider.getVotacionDetalle(widget.votacionId, userProvider.token!);
 
       await provider.hasVoted(
         context.read<UserProvider>().user!.id,
-        widget.votacionId,
+        widget.votacionId, 
+        userProvider.token!
       );
 
       if (provider.voto != null) {
@@ -52,14 +53,9 @@ class _VotacionDetalleState extends State<VotacionDetalleScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<VotacionProvider>();
     final user = context.watch<UserProvider>().user;
+    final token = context.watch<UserProvider>().token;
     
-    if (user == null) {
-      return Scaffold(
-        body: const Center(child: CircularProgressIndicator())
-      );
-    }
-    
-    if (provider.isLoading) {
+    if (provider.isLoading || user == null || token == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -140,7 +136,7 @@ class _VotacionDetalleState extends State<VotacionDetalleScreen> {
                 onPressed: opcionSeleccionada.isEmpty || opcionSeleccionada == voto?.opcion || finalizada
                   ? null 
                   : () async {
-                    await provider.votar(user.id, widget.votacionId, opcionSeleccionada);
+                    await provider.votar(user.id, widget.votacionId, opcionSeleccionada, token);
                   },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.background

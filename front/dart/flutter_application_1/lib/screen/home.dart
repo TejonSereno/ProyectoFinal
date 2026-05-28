@@ -20,8 +20,7 @@ class _HomeState extends State<HomeScreen>{
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final user = userProvider.user;
+    final user = Provider.of<UserProvider>(context).user;
 
     if (user == null) {
       return const Center(child: CircularProgressIndicator());

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/model/aviso/aviso.dart';
-import 'package:flutter_application_1/data/model/aviso/aviso_list.dart';
-import 'package:flutter_application_1/data/repositories/repository.dart';
+import 'package:flutter_application_1/data/repositories/avisoRepository.dart';
 
 class AvisoProvider extends ChangeNotifier {
-  final Repository repository;
+  final AvisoRepository repository;
 
   AvisoProvider(this.repository);
 
@@ -18,34 +17,33 @@ class AvisoProvider extends ChangeNotifier {
   bool get isCreating => _isCreating;
   String get error => _error;
 
-  Future<void> getAvisos() async{
-    _isLoading = true;
-    notifyListeners();
+  Future<void> getAvisos(String token) async{
+    try{
+      _isLoading = true;
+      notifyListeners();
 
-    final response = await repository.getAvisosActivos();
+      final response = await repository.getAvisosActivos(token);
 
-    if (response is AvisoList) {
       _avisos = response.avisos;
-      _error = "";
-    } else {
-      _error = response.toString();
+    }catch(e){
+      _error = e.toString();
+    }finally{
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
-  Future<bool> createAviso(String titulo, String descripcion, DateTime fechaFin) async{
+  Future<bool> createAviso(String titulo, String descripcion, DateTime fechaFin, String token) async{
     _isCreating = true;
     notifyListeners();
 
-    final response = await repository.createAviso(titulo, descripcion, fechaFin);
+    final response = await repository.createAviso(titulo, descripcion, fechaFin, token);
 
     _isCreating = false;
     notifyListeners();
 
     if (response == 200) {
-      getAvisos();
+      getAvisos(token);
       notifyListeners();
       return true;
     }
@@ -53,8 +51,8 @@ class AvisoProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<bool> deleteAviso(int id) async{
-    final response = await repository.deleteAviso(id);
+  Future<bool> deleteAviso(int id, String token) async{
+    final response = await repository.deleteAviso(id, token);
 
     if (response == 200) {
       _avisos.removeWhere((v) => v.id == id);

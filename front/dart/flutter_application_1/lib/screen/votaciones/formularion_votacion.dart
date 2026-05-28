@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/providers/user_provider.dart';
 import 'package:flutter_application_1/data/providers/votacion_provider.dart';
 import 'package:flutter_application_1/paleta/Colors.dart';
 import 'package:flutter_application_1/utils/selector_fecha.dart';
@@ -30,6 +31,7 @@ class _FormularioVotacionState extends State<FormularioVotacion> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<VotacionProvider>();
+    final token = context.watch<UserProvider>().token;
 
     return Container(
       decoration: BoxDecoration(
@@ -208,7 +210,7 @@ class _FormularioVotacionState extends State<FormularioVotacion> {
                       );
                       return;
                     }
-                    final ok = await provider.createVotacion(tituloController.text, descripcionController.text, selectedDate!, opcionesController.map((e) => e.text.trim()).toList());
+                    final ok = await provider.createVotacion(tituloController.text, descripcionController.text, selectedDate!, opcionesController.map((e) => e.text.trim()).toList(), token!);
                     if (ok) {
                       tituloController.clear();
                       descripcionController.clear();

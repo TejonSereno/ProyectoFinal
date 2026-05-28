@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/model/user.dart';
+import 'package:flutter_application_1/data/model/loguin/user.dart';
 import 'package:flutter_application_1/data/providers/user_provider.dart';
 import 'package:flutter_application_1/data/providers/usuario_provider.dart';
 import 'package:flutter_application_1/paleta/colors.dart';
@@ -16,7 +16,6 @@ class UsuariodetalleScreen extends StatefulWidget {
 class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final TextEditingController newpasswordController = TextEditingController();
   final TextEditingController confirmpasswordController = TextEditingController();
 
@@ -24,14 +23,12 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
   final TextEditingController numeroController = TextEditingController();
 
   bool _initialized = false;
-  bool passwordOculta = true;
   bool passwordChage = false;
 
   @override
   void dispose() {
     nombreController.dispose();
     emailController.dispose();
-    passwordController.dispose();
     newpasswordController.dispose();
     confirmpasswordController.dispose();
     calleController.dispose();
@@ -43,8 +40,9 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<UsuarioProvider>();
     final user = context.watch<UserProvider>().user;
+    final token = context.watch<UserProvider>().token;
 
-    if (user == null || provider.isLoading) {
+    if (provider.isLoading || user == null || token == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -63,7 +61,6 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
     if (!_initialized) {
       nombreController.text = user.nombre;
       emailController.text = user.email;
-      passwordController.text = user.password;
 
       if (hasVivienda) {
         calleController.text = user.vivienda!.calle;
@@ -114,23 +111,7 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
                 SizedBox(height: 16.0),
                 buildCampo(controller: emailController, readOnly: false),
                 SizedBox(height: 16.0),
-                passwordOculta 
-                ? Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        passwordOculta = !passwordOculta;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.background
-                    ),
-                    child: Text("Mostrar contraseña", style: TextStyle(color: AppColors.text.withOpacity(0.7), fontSize: 14.0))
-                  ),
-                )
-                : passwordChage 
+                passwordChage 
                 ? Column(
                   children: [
                     buildCampo(controller: newpasswordController, readOnly: false, hint: "Nueva contraseña"),
@@ -138,26 +119,16 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
                     buildCampo(controller: confirmpasswordController, readOnly: false, hint: "Repetir contraseña"),
                   ],
                 )
-                : Column(
-                  children: [
-                    buildCampo(controller: passwordController, readOnly: true),
-                    SizedBox(height: 10.0),
-                     Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(top: 8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            passwordChage = !passwordChage;
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.background
-                        ),
-                        child: Text("Cambiar contraseña", style: TextStyle(color: AppColors.text.withOpacity(0.7), fontSize: 14.0))
-                      ),
-                    )
-                  ],
+                : ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      passwordChage = !passwordChage;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.background
+                  ),
+                  child: Text("Cambiar contraseña", style: TextStyle(color: AppColors.text.withOpacity(0.7), fontSize: 14.0))
                 ),
                 SizedBox(height: 16.0),
                 Container(
@@ -166,7 +137,7 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
                   child: ElevatedButton(
                     onPressed: !hasChanges 
                     ? null 
-                    : () => _aplicarCambios(provider, user),
+                    : () => _aplicarCambios(provider, user, token),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.background
                     ),
@@ -256,6 +227,7 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
   Future<void> _aplicarCambios(
     UsuarioProvider provider,
     User user,
+    String token
   ) async {
 
     FocusScope.of(context).unfocus();
@@ -277,7 +249,8 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
       emailController.text,
       newpasswordController.text.isNotEmpty
         ? newpasswordController.text
-        : user.password,
+        : "",
+      token
     );
 
     if (!mounted) return;
@@ -287,9 +260,6 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
       context.read<UserProvider>().updateUser(
         nombre: nombreController.text,
         email: emailController.text,
-        password: newpasswordController.text.isNotEmpty
-          ? newpasswordController.text
-          : user.password,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -301,7 +271,6 @@ class _UsuariodetalleScreenState extends State<UsuariodetalleScreen> {
 
       setState(() {
         passwordChage = false;
-        passwordOculta = true;
         newpasswordController.clear();
         confirmpasswordController.clear();
         _initialized = false;
