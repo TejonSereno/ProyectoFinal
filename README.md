@@ -33,7 +33,7 @@ Futter App → Spring Boot API (Render) → PostgreSQL(Supabase)
 # Documentacion
 - Swagger
   https://proyectofinal-ujbs.onrender.com/swagger-ui.html
--OpenAPI
+- OpenAPI
   https://proyectofinal-ujbs.onrender.com/v3/api-docs
 
 # Autentication
