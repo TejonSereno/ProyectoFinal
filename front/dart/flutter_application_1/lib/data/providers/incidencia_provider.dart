@@ -44,7 +44,7 @@ class IncidenciaProvider extends ChangeNotifier{
 
       _incidencias = response.incidencias;
     }catch(e){
-      _error = e.toString();
+      _error = e.toString().replaceFirst("Exception: ", "");
     }finally{
       _isLoading = false;
       notifyListeners();

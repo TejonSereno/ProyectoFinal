@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/model/loguin/user.dart';
-import 'package:flutter_application_1/data/model/vivienda/vivienda.dart';
 import 'package:flutter_application_1/data/repositories/authRepository.dart';
 
 class UserProvider with ChangeNotifier {
   User? user;
   String? token;
+  String _error = "";
 
   final Authrepository _authRepository;
 
   UserProvider(this._authRepository);
 
+  String get error => _error;
+
   Future<void> login(String email, String password) async {
     try {
+      _error = "";
+
       final loginResponse =
           await _authRepository.getlogin(email, password);
 
       user = loginResponse.usuario;
       token = loginResponse.token;
 
-      notifyListeners();
     } catch (e) {
-      rethrow;
+      _error = e.toString().replaceFirst("Exception: ", "");
+
+    }finally {
+
+      notifyListeners();
     }
   }
 

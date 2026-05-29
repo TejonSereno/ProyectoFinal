@@ -63,7 +63,6 @@ public class DataSeeder {
             admin.setPassword(passwordEncoder.encode("1234"));
             admin.setRol("ADMIN");
             admin.setComunidad(comunidad);
-            admin.setVivienda(v1);
 
             Usuario user1 = new Usuario();
             user1.setNombre("Juan Pérez");

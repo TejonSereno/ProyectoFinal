@@ -29,7 +29,7 @@ class ViviendaProvider extends ChangeNotifier{
 
       _viviendas = response.viviendas;
     }catch(e){
-      _error = e.toString();
+      _error = e.toString().replaceFirst("Exception: ", "");
     }finally{
       _isLoading = false;
     notifyListeners();
@@ -44,14 +44,14 @@ class ViviendaProvider extends ChangeNotifier{
     final response = await repository.putNewVivienda(calle, numero, token);
 
     _isCreating = false;
+    notifyListeners();
 
     if (response == 200) {
       getViviendas(token);
       notifyListeners();
       return true;  
     }
-
-    notifyListeners();
+    
     return false;
   }
 
@@ -78,7 +78,7 @@ class ViviendaProvider extends ChangeNotifier{
       _viviendaDetalle = response;
     
     }catch(e){
-      _error = e.toString();
+      _error = e.toString().replaceFirst("Exception: ", "");
     } finally{
       _isLoading = false;
       notifyListeners();

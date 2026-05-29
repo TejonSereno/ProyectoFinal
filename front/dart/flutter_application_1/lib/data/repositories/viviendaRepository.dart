@@ -46,7 +46,7 @@ class ViviendaRepository {
 
   Future putNewVivienda(String calle, String numero, String token) async{
     final response = await http.post(
-      Uri.parse("$url/api/viviendas"),
+      Uri.parse("$url/viviendas"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",

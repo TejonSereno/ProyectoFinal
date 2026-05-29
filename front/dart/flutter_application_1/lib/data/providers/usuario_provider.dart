@@ -24,7 +24,7 @@ class UsuarioProvider extends ChangeNotifier{
 
       _usuarios = response.usuarios;
     }catch(e){
-      _error = e.toString();
+      _error = e.toString().replaceFirst("Exception: ", "");
     }finally{
       _isLoading = false;
       notifyListeners();

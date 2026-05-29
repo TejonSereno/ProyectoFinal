@@ -18,7 +18,6 @@ class _LoguinState extends State<LoguinScreen>{
 
   String email = "";
   String password = "";
-  String message = "";
   User usuario = User(id: 0, email: "", nombre: "", rol: "");
 
   @override
@@ -66,7 +65,20 @@ class _LoguinState extends State<LoguinScreen>{
                   },
                 ),
               ),
-              errorMessage(message),
+              Consumer<UserProvider>(
+                builder: (context, provider, child) {
+                  if (provider.error.isEmpty) {
+                    return SizedBox.shrink();
+                  }
+
+                  return Text(
+                    provider.error,
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  );
+                },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -117,7 +129,6 @@ class _LoguinState extends State<LoguinScreen>{
   }
 
   void logIn(String email, String password) async {
-  try {
     await Provider.of<UserProvider>(
       context,
       listen: false,
@@ -125,26 +136,19 @@ class _LoguinState extends State<LoguinScreen>{
 
     if (!mounted) return;
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => HomeScreen(),
-      ),
+    final provider = Provider.of<UserProvider>(
+      context,
+      listen: false,
     );
 
-  } catch (e) {
-    if (!mounted) return;
-
-    setState(() {
-      message = e.toString();
-    });
+    if (provider.user != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    }
   }
-}
-
-  Column errorMessage(String message) => Column(
-    children: [
-      Text(message)  
-    ],
-  );
 }
 
   

@@ -82,9 +82,19 @@ class _UsuarioState extends State<UsuarioScreen>{
                       )
                     ],
                   ),
-                  u.calle != null
-                    ? Text("  ${u.calle}, ${u.numero}", style: TextStyle(fontSize: 12),) 
-                    : Text("  Sin Vivienda", style: TextStyle(fontSize: 12),)
+                  user.rol == "ADMIN"
+                  ? (
+                      u.calle != null
+                        ? Text(
+                            "  ${u.calle}, ${u.numero}",
+                            style: TextStyle(fontSize: 12),
+                          )
+                        : Text(
+                            "  Sin Vivienda",
+                            style: TextStyle(fontSize: 12),
+                          )
+                    )
+                  : SizedBox.shrink(),
                 ],
               ),
               trailing: user.rol == "ADMIN"? Row(

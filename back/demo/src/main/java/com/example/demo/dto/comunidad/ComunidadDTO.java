@@ -1,7 +1,9 @@
 package com.example.demo.dto.comunidad;
 
 import com.example.demo.models.Comunidad;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información de una comunidad")
 public class ComunidadDTO {
     private Long id;
     private String nombre;

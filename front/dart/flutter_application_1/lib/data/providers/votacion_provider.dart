@@ -32,7 +32,7 @@ class VotacionProvider extends ChangeNotifier{
 
       _votaciones = response.votaciones;
     }catch(e){
-      _error = e.toString();
+      _error = e.toString().replaceFirst("Exception: ", "");
     }finally{
       _isLoading = false;
       notifyListeners();
@@ -77,7 +77,7 @@ class VotacionProvider extends ChangeNotifier{
       final response = await repository.getVotacionDetalle(id, token);
       _votaciondetalle = response;
     }catch(e){
-      _error = e.toString();
+      _error = e.toString().replaceFirst("Exception: ", "");
     }finally{
       _isLoading = false;
     notifyListeners();
