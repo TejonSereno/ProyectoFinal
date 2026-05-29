@@ -1,6 +1,11 @@
 # ProyectoFinal
 Aplicación de gestión de comunidades de vecinos desarrollada con arquitectura full stack mediante Spring Boot y Flutter.
 
+## Descargar APK
+La última versión de la aplicación Android está disponible en:
+
+https://github.com/TejonSereno/ProyectoFinal/releases
+
 # Tecnologías
 
 ## Backend
