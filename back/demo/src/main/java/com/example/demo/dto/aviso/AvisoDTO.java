@@ -1,9 +1,11 @@
 package com.example.demo.dto.aviso;
 
 import com.example.demo.models.Aviso;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
+@Schema(description = "Información de un aviso")
 public class AvisoDTO {
     private Long id;
     private String titulo;

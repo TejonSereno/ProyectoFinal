@@ -3,15 +3,25 @@ package com.example.demo.dto.vivienda;
 
 import com.example.demo.dto.usuario.UsuarioDTO;
 import com.example.demo.models.Vivienda;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
+@Schema(description = "Información detallada de una vivienda")
 public class ViviendaDetalleDTO {
 
+    @Schema(example = "1")
     private Long id;
+
+    @Schema(example = "Calle Mayor")
     private String calle;
+
+    @Schema(example = "1")
     private String numero;
+
+    @Schema(example = "1")
     private Long comunidadId;
+
     private List<UsuarioDTO> usuarios;
 
     public ViviendaDetalleDTO() {

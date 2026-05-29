@@ -4,12 +4,14 @@ import com.example.demo.dto.comunidad.ComunidadCreateDTO;
 import com.example.demo.dto.comunidad.ComunidadDTO;
 import com.example.demo.dto.comunidad.ComunidadDetalleDTO;
 import com.example.demo.services.ComunidadService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/comunidades")
+@Tag(name = "Comunidad", description = "Operaciones de comunidades")
 public class ComunidadController {
 
     private final ComunidadService comunidadService;

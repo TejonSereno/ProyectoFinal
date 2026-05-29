@@ -1,7 +1,9 @@
 package com.example.demo.dto.vivienda;
 
 import com.example.demo.models.Vivienda;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información para listar viviendas")
 public class ViviendaListadoDTO {
     private Long id;
     private String calle;

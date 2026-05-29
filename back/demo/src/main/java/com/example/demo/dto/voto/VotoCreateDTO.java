@@ -1,5 +1,8 @@
 package com.example.demo.dto.voto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Información para crear un voto")
 public class VotoCreateDTO {
 
     private Long votacionId;

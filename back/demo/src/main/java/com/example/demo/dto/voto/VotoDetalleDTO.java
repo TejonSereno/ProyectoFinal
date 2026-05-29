@@ -2,12 +2,20 @@ package com.example.demo.dto.voto;
 
 import com.example.demo.dto.usuario.UsuarioDTO;
 import com.example.demo.models.Voto;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información detallada de un voto")
 public class VotoDetalleDTO {
 
+    @Schema(example = "1")
     private Long id;
+
+    @Schema(example = "Si")
     private String opcion;
+
+    @Schema(example = "1")
     private Long votacionId;
+
     private UsuarioDTO usuario;
 
 

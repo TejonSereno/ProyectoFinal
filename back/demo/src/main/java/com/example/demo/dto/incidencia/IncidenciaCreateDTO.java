@@ -1,6 +1,8 @@
 package com.example.demo.dto.incidencia;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información para crear una incidencia")
 public class IncidenciaCreateDTO {
 
     private String titulo;

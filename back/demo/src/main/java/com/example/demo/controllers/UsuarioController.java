@@ -4,6 +4,7 @@ import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegistreRequest;
 import com.example.demo.dto.usuario.*;
 import com.example.demo.services.UsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
+@Tag(name = "Usuarios", description = "Operaciones de usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;

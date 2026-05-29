@@ -1,7 +1,9 @@
 package com.example.demo.dto.usuario;
 
 import com.example.demo.models.Usuario;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información para listar usuarios")
 public class UsuarioListadoDTO {
 
     private Long id;

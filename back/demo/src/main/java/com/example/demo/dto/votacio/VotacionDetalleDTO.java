@@ -1,23 +1,38 @@
 package com.example.demo.dto.votacio;
 
 import com.example.demo.models.Votacion;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Schema(description = "Información detallada de una votacion")
 public class VotacionDetalleDTO {
 
+    @Schema(example = "1")
     private Long id;
+
+    @Schema(example = "Instalar ascensor")
     private String titulo;
+
+    @Schema(example = "Votacion para instalar ascensor")
     private String descripcion;
+
+    @Schema(example = "[Si, No]")
     private List<String> opciones;
+
+    @Schema(example = "2026-05-28T12:06:00")
     private LocalDateTime fechaInicio;
+
+    @Schema(example = "2026-05-30T12:06:00")
     private LocalDateTime fechaFin;
 
+    @Schema(example = "1")
     private Long comunidadId;
 
+    @Schema(example = "{Si: 2, No: 4}")
     private Map<String, Long> resultados;
 
     public VotacionDetalleDTO() {

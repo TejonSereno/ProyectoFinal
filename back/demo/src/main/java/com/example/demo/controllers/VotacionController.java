@@ -4,6 +4,7 @@ import com.example.demo.dto.votacio.VotacionCreateDTO;
 import com.example.demo.dto.votacio.VotacionDTO;
 import com.example.demo.dto.votacio.VotacionDetalleDTO;
 import com.example.demo.services.VotacionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/votaciones")
+@Tag(name = "Votaciones", description = "Operaciones de votaciones")
 public class VotacionController {
 
     private final VotacionService votacionService;

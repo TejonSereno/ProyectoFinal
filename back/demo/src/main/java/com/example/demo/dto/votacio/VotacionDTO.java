@@ -1,7 +1,10 @@
 package com.example.demo.dto.votacio;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 
+@Schema(description = "Información de una votacion")
 public class VotacionDTO {
 
     private Long id;

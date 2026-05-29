@@ -1,7 +1,9 @@
 package com.example.demo.dto.incidencia;
 
 import com.example.demo.models.Incidencia;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información de una incidencia")
 public class IncidenciaDTO {
 
     private Long id;

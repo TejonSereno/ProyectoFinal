@@ -4,12 +4,14 @@ import com.example.demo.dto.voto.VotoCreateDTO;
 import com.example.demo.dto.voto.VotoDTO;
 import com.example.demo.dto.voto.VotoDetalleDTO;
 import com.example.demo.services.VotoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/votos")
+@Tag(name = "Votos", description = "Operaciones de votos")
 public class VotoController {
 
     private final VotoService votoService;

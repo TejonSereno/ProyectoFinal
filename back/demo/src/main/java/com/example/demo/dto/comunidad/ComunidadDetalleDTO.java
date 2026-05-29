@@ -5,14 +5,22 @@ import com.example.demo.dto.usuario.UsuarioDTO;
 import com.example.demo.dto.vivienda.ViviendaDTO;
 import com.example.demo.dto.votacio.VotacionDTO;
 import com.example.demo.models.Comunidad;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
+@Schema(description = "Información detallada de una comunidad")
 public class ComunidadDetalleDTO {
 
+    @Schema(example = "1")
     private Long id;
+
+    @Schema(example = "Comunidad Edificio Central")
     private String nombre;
+
+    @Schema(example = "Calle Mayor 123")
     private String direccion;
+
     private List<UsuarioDTO> usuarios;
     private List<ViviendaDTO> viviendas;
     private List<VotacionDTO> votaciones;

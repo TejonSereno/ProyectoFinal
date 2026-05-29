@@ -5,6 +5,7 @@ import com.example.demo.dto.vivienda.ViviendaDTO;
 import com.example.demo.dto.vivienda.ViviendaDetalleDTO;
 import com.example.demo.dto.vivienda.ViviendaListadoDTO;
 import com.example.demo.services.ViviendaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/viviendas")
+@Tag(name = "Viviendas", description = "Operaciones de Viviendas")
 public class ViviendaController {
 
     private final ViviendaService viviendaService;

@@ -1,5 +1,8 @@
 package com.example.demo.dto.usuario;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Información para crear un usuario")
 public class UsuarioCreateDTO {
 
     private String nombre;

@@ -4,6 +4,7 @@ import com.example.demo.dto.incidencia.IncidenciaCreateDTO;
 import com.example.demo.dto.incidencia.IncidenciaDTO;
 import com.example.demo.dto.incidencia.IncidenciaDetalleDTO;
 import com.example.demo.services.IncidenciaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/incidencias")
+@Tag(name = "Incidencias", description = "Operaciones de incidencias")
 public class IncidenciaController {
 
     private final IncidenciaService incidenciaService;

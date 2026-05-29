@@ -2,14 +2,26 @@ package com.example.demo.dto.usuario;
 
 import com.example.demo.dto.vivienda.ViviendaDTO;
 import com.example.demo.models.Usuario;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información detallada de un usuario")
 public class UsuarioDetalleDTO {
 
+    @Schema(example = "1")
     private Long id;
+
+    @Schema(example = "juan")
     private String nombre;
+
+    @Schema(example = "juan@test.com")
     private String email;
+
+    @Schema(example = "1234")
     private String password;
+
+    @Schema(example = "USER")
     private String rol;
+
     private ViviendaDTO viviendaDTO;
 
     public UsuarioDetalleDTO() {

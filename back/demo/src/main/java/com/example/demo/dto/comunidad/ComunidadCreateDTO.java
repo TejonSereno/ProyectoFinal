@@ -1,5 +1,8 @@
 package com.example.demo.dto.comunidad;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Información para crear una comunidad")
 public class ComunidadCreateDTO {
 
     private String nombre;

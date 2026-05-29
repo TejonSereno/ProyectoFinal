@@ -12,6 +12,7 @@ import com.example.demo.repositories.ViviendaRepository;
 import com.example.demo.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -98,12 +99,18 @@ public class UsuarioService {
 
     public AuthResponse login(LoginRequest loginRequest) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+        try {
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+
+        } catch (BadCredentialsException e) {
+            throw new ResourceNotFoundException("Credenciales incorrectas");
+        }
 
         Usuario usuario = usuarioRepository
                 .findByEmail(loginRequest.getEmail())
