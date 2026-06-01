@@ -33,7 +33,7 @@ Futter App → Spring Boot API (Render) → PostgreSQL(Supabase)
 # Documentacion
 - Swagger
   https://proyectofinal-ujbs.onrender.com/swagger-ui.html
--OpenAPI
+- OpenAPI
   https://proyectofinal-ujbs.onrender.com/v3/api-docs
 
 # Autentication
@@ -70,6 +70,24 @@ Esto implica que:
 - La instancia puede suspenderse por inactividad.
 - El primer request tras varios minutos sin uso puede experimentar un retraso de hasta 2 min.
 - Una vez activa, la API responde con normalidad.
-  
+
+## Descargar APK
+La última versión de la aplicación Android está disponible en:
+
+https://github.com/TejonSereno/ProyectoFinal/releases
+
+# Acceso de Demostración
+La aplicación incluye usuarios de prueba para facilitar su evaluación.
+
+## Usuario Administrador
+- Email: admin@test.com
+- Contraseña: 1234
+Permite acceder a las funcionalidades de administración.
+
+## Usuario Estándar
+- Email: juan@test.com
+- Contraseña: 1234
+Permite acceder a las funcionalidades disponibles para los vecinos.
+
 ## Repositorio
 https://github.com/TejonSereno/ProyectoFinal
