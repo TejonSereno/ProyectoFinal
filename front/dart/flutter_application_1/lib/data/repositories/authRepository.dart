@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 class Authrepository {
   final String url = "https://proyectofinal-ujbs.onrender.com";
-  //final String url = "https://192.168.1.152:8080";
 
   Future getlogin(String email, String password) async{
     final response = await http.post(

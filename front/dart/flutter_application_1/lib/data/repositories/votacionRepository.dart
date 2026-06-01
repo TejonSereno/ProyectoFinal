@@ -107,7 +107,7 @@ class VotacionRepository{
     if(response.statusCode == 200){
       return Voto.fromJson(decodeJson);
     }else{
-      throw Exception(decodeJson["message"]);
+      return false;
     }
   }
 
