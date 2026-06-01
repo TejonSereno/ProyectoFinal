@@ -80,13 +80,13 @@ https://github.com/TejonSereno/ProyectoFinal/releases
 La aplicación incluye usuarios de prueba para facilitar su evaluación.
 
 ## Usuario Administrador
-- Email: admin@demo.com
-- Contraseña: ********
+- Email: admin@test.com
+- Contraseña: 1234
 Permite acceder a las funcionalidades de administración.
 
 ## Usuario Estándar
-- Email: usuario@demo.com
-- Contraseña: ********
+- Email: juan@test.com
+- Contraseña: 1234
 Permite acceder a las funcionalidades disponibles para los vecinos.
 
 ## Repositorio
