@@ -30,11 +30,14 @@ Controller → Service → Repository → Database
 
 ## Produccion
 Futter App → Spring Boot API (Render) → PostgreSQL(Supabase)
+
 # Documentacion
 - Swagger
   https://proyectofinal-ujbs.onrender.com/swagger-ui.html
 - OpenAPI
   https://proyectofinal-ujbs.onrender.com/v3/api-docs
+- documentos
+  https://github.com/TejonSereno/ProyectoFinal/tree/main/docs
 
 # Autentication
 1. El usuario inicia sesión.
